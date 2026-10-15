@@ -443,7 +443,7 @@ async function personalizeOwner(){
   document.documentElement.classList.add('ld');
   try{
     const ctl=new AbortController();setTimeout(()=>ctl.abort(),6000);
-    const r=await(await fetch(CONFIG.SUBMIT_URL+'?c='+encodeURIComponent(C),{signal:ctl.signal})).json();
+    const r=await(await fetch(CONFIG.SUBMIT_URL+'?code='+encodeURIComponent(C),{signal:ctl.signal})).json();
     if(!r.ok)throw 0;
     DATA.store=r.store||DATA.store;DATA.nick=r.nick||DATA.nick;DATA.due=r.due||DATA.due;
   }catch(e){DATA.store='사장님 가게';DATA.nick='단골 손님';} // 편지코드가 틀리거나 응답이 없으면 일반 표현

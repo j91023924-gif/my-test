@@ -37,9 +37,9 @@ var OWNER_URL = 'https://j91023924-gif.github.io/my-test/%EC%A0%90%EC%A3%BCQR/';
 function doGet(e) {
   var q = e.parameter || {};
   var out = { ok: false };
-  if (q.c) {
+  if (q.code) { // c는 Apps Script 웹 앱이 예약한 이름이라 조회에는 code를 쓴다
     // 점주 페이지: 편지코드로 매장명 · 편지 전한 손님 닉네임 · 문의 기한만 돌려준다
-    var lp = letter(q.c);
+    var lp = letter(q.code);
     if (lp) out = { ok: true, store: lp.store, nick: lp.nick, due: lp.due };
   } else {
     var p = target(q.t);

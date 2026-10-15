@@ -268,6 +268,16 @@ p,.lead,.sub,.fn,.note,.note2,.cond,.say,.qt,.pt,.bf span,.vc span,.cm .p .t spa
 .cpi{font-size:15px;line-height:23px;color:var(--ink2);margin:0 0 4px}
 .cm.v3{grid-template-columns:1fr;gap:10px}.cm.v3 .p img{aspect-ratio:3/2;object-fit:cover;width:100%;display:block}.cm.v3 .p .t b{font-size:17px;font-weight:700;line-height:25px}.cm.v3 .p .t span{font-size:15px;font-weight:400;line-height:23px;color:var(--ink2);margin-top:4px}
 .cm.v3 .p:last-child img{object-position:center 70%}
+.hl{font-weight:700;color:var(--ink);background:linear-gradient(transparent 58%,#FFDCC6 58%);padding:0 2px}
+.cpi .hl{color:var(--or-text)}
+.p .t span span.hl{display:inline;font-size:inherit;line-height:inherit;margin:0}
+.sub2{font-size:14px;line-height:22px;color:var(--ink3);margin:-4px 0 0}
+ul.dl{list-style:none;padding:0}ul.dl li{position:relative;padding-left:12px}ul.dl li+li{margin-top:2px}ul.dl li:before{content:"·";position:absolute;left:1px;font-weight:700}
+ul.cond.dl li b{color:var(--ink)}
+ul.note2.dl{padding:12px 14px 12px 16px}ul.cond.dl{font-weight:400;color:var(--ink3);font-size:13.5px;line-height:21px}ul.cond.dl li b{font-weight:700;color:var(--ink)}
+.note2{background:var(--soft,#F6F3EF);border-radius:12px;padding:12px 14px;font-size:15px;line-height:23px;color:var(--ink2);margin-top:12px}.note2 b{color:var(--ink)}
+.cpi{text-align:left}
+.hl{padding:0 2px;margin:0 -2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 
 /* 개인화 값을 받아 오는 동안 매장명 · 닉네임 자리를 잠깐 가린다 */
 html.ld .store,html.ld .nick{color:transparent!important;background:#EDE7E2;border-radius:4px}
@@ -277,23 +287,24 @@ html.ld .store,html.ld .nick{color:transparent!important;background:#EDE7E2;bord
 <section id="form"><div class="pad">
 <div class="kicker"><span class="store">패스카페</span> 사장님께 드릴 편지</div>
 <div class="h1">봉투에 두 줄 적고<br><em>건네 주시면 돼요</em></div>
-<p class="lead">이 카페를 찾는 손님들의 소식과 패스오더 소개를 담은 편지예요.<br>주문하러 가실 때 가져가서 사장님이나 직원분께 건네 주세요. 건네신 뒤에는 아래 버튼으로 건넨 날을 알려주세요.</p>
+<p class="lead"><span class="hl">주문하러 가실 때 가져가서</span> 사장님이나 직원분께 건네 주세요.<br>건네신 뒤 아래 버튼으로 알려주세요.</p>
+<p class="sub2">이 카페를 찾는 손님들의 소식과 패스오더 소개를 담은 편지예요.</p>
 
 <div class="lbl">하실 일</div>
 <div class="cm v3">
-<div class="p"><div class="im"><img src="assets/img/step1.jpg" alt=""><div class="n">1</div></div><div class="t"><b>봉투에 두 줄</b><span>「사장님께」와 내 이름, 두 줄이면 돼요. 이름 대신 닉네임을 적으셔도 돼요</span></div></div>
-<div class="p"><div class="im"><img src="assets/img/step2.jpg" alt=""><div class="n">2</div></div><div class="t"><b>주문할 때 건네요</b><span>「사장님께 드리는 편지예요」 한마디면 돼요. 직원분께 맡겨도 괜찮고, 받지 않으시면 더 권하지 않으셔도 돼요</span></div></div>
-<div class="p"><div class="im"><img src="assets/img/step3.jpg" alt=""><div class="n">3</div></div><div class="t"><b>건넨 날을 알려주세요</b><span>아래 버튼을 눌러 건넨 날짜와 누구에게 건넸는지 골라 주시면 <i data-cfg="PAY_DAYS" style="font-style:normal">영업일 3일</i> 안에 참여 쿠폰을 쿠폰함에 넣어 드려요</span></div></div>
+<div class="p"><div class="im"><img src="assets/img/step1.jpg" alt=""><div class="n">1</div></div><div class="t"><b>봉투에 두 줄</b><span>「사장님께」와 내 이름, <span class="hl">두 줄이면 돼요</span>.<br>이름 대신 닉네임도 괜찮아요</span></div></div>
+<div class="p"><div class="im"><img src="assets/img/step2.jpg" alt=""><div class="n">2</div></div><div class="t"><b>주문할 때 건네요</b><span>「사장님께 드리는 편지예요」 <span class="hl">한마디면 돼요</span>.<br>직원분께 맡겨도 괜찮고, 받지 않으시면 더 권하지 않으셔도 돼요</span></div></div>
+<div class="p"><div class="im"><img src="assets/img/step3.jpg" alt=""><div class="n">3</div></div><div class="t"><b>건넨 날을 알려주세요</b><span>아래 버튼으로 건넨 날을 알려주시면<br><span class="hl"><i data-cfg="PAY_DAYS" style="font-style:normal">영업일 3일</i> 안에</span> 참여 쿠폰이 들어가요</span></div></div>
 </div>
-<div class="envw"><div class="envl">봉투 앞면 · 받으신 뒤 펜으로 이렇게 직접 적어요</div>
+<div class="envw"><div class="envl">봉투 앞면에 펜으로 이렇게 적어요</div>
 <div class="env plain hw"><div class="to2"><span class="w" data-t="사장님께"></span></div><div class="nm2"><span class="w nm" data-t=""></span></div><div class="tip">이렇게 두 줄만<br>직접 적으면 돼요</div><button type="button" class="replay" onclick="hwPlay(true)">다시 보기</button></div></div>
 <div class="due"><span><b style="color:var(--ink);font-size:13.5px"><span class="nb">○월 ○일(○)</span></b>까지 건네 주세요</span><b id="left">14일 남았어요</b></div>
-<div class="lbl" style="margin-top:22px">쿠폰</div><p class="cpi">편지를 건네고 건넨 날을 알려주시면 참여 쿠폰을 드리고, 사장님이 편지 속 QR로 패스오더에 연락하시면 10,000원 쿠폰을 더 드려요.</p>
-<div class="cpp"><div class="k a"><img class="bg" src="assets/img/coupon_a_bg.jpg" alt=""><div class="txt"><span class="s">편지를 건네고 알려주시면</span><div class="v">참여 쿠폰</div><div class="d">사장님이 연락하지 않으셔도 드려요</div></div><img class="ic" src="assets/img/coupon_a_icon.png" alt=""></div><div class="k b"><img class="bg" src="assets/img/coupon_b_bg.jpg" alt=""><div class="txt"><span class="s">사장님이 패스오더에 연락하시면</span><div class="v">10,000원</div><div class="d">쿠폰 1장 더 드려요</div></div><img class="ic" src="assets/img/coupon_b_icon.png" alt=""></div></div>
-<div class="cond"><b>참여 쿠폰은 기한 안에 건네고 알려주신 분께 드려요.</b><br>쿠폰은 패스오더 앱 쿠폰 · <span data-cfg="COUPON_COND">받은 날부터 30일 · 참여 쿠폰은 5,000원 이상 주문 시</span></div>
+<div class="lbl" style="margin-top:22px">쿠폰</div><p class="cpi">편지를 건네고 알려주시면 <span class="hl">참여 쿠폰</span><br>사장님이 연락하시면 <span class="hl">10,000원 쿠폰</span>까지</p>
+<div class="cpp"><div class="k a"><img class="bg" src="assets/img/coupon_a_bg.jpg" alt=""><div class="txt"><span class="s">편지를 건네고 알려주시면</span><div class="v">참여 쿠폰</div><div class="d">사장님 연락이 없어도 드려요</div></div><img class="ic" src="assets/img/coupon_a_icon.png" alt=""></div><div class="k b"><img class="bg" src="assets/img/coupon_b_bg.jpg" alt=""><div class="txt"><span class="s">사장님이 패스오더에 연락하시면</span><div class="v">10,000원</div><div class="d">쿠폰 1장 더 드려요</div></div><img class="ic" src="assets/img/coupon_b_icon.png" alt=""></div></div>
+<div class="cond"><b>참여 쿠폰은 기한 안에 건네고 알려주신 분께 드려요</b></div>
 
 </div>
-<div class="bar"><div class="note">건넨 날짜와 받으신 분을 알려주시면 참여 쿠폰을 드려요</div><button class="btn" onclick="openSheet()">편지 건넨 날 알려주기 &gt;</button></div>
+<div class="bar"><div class="note">건넨 날짜와 누구에게 건넸는지 알려주시면 참여 쿠폰을 드려요</div><button class="btn" onclick="openSheet()">편지 건넨 날 알려주기 &gt;</button></div>
 </section>
 
 <div class="dim" id="dim" hidden onclick="closeSheet()"></div>
@@ -309,10 +320,11 @@ html.ld .store,html.ld .nick{color:transparent!important;background:#EDE7E2;bord
 <section id="res" hidden><div class="pad">
 <div class="kicker"><span class="store">패스카페</span> 사장님께 드릴 편지</div>
 <div class="h1">편지를 전해 주셔서<br><em>고마워요</em></div>
-<p class="lead"><b id="handDate"><span class="nb">○월 ○일</span></b>에 건네셨다고 알려주셨어요. 이제 더 하실 일은 없어요.<br>참여 쿠폰은 <span data-cfg="PAY_DAYS">영업일 3일</span> 안에 쿠폰함으로 보내 드려요.<br>사장님이 편지 속 QR로 패스오더에 연락하시면 10,000원 쿠폰을 더 드리고, 연락이 오면 카카오톡으로 알려드릴게요.</p>
-<div class="live gray"><i></i>날짜나 받으신 분을 잘못 고르셨나요? <span class="link2" onclick="back()">고치기</span></div>
-<div class="cpp"><div class="k a"><img class="bg" src="assets/img/coupon_a_bg.jpg" alt=""><div class="txt"><span class="s">편지를 건네고 알려주시면</span><div class="v">참여 쿠폰</div><div class="d">사장님이 연락하지 않으셔도 드려요</div></div><img class="ic" src="assets/img/coupon_a_icon.png" alt=""></div><div class="k b"><img class="bg" src="assets/img/coupon_b_bg.jpg" alt=""><div class="txt"><span class="s">사장님이 패스오더에 연락하시면</span><div class="v">10,000원</div><div class="d">쿠폰 1장 더 드려요</div></div><img class="ic" src="assets/img/coupon_b_icon.png" alt=""></div></div>
-<div class="cond">쿠폰은 패스오더 앱 쿠폰 · <span data-cfg="COUPON_COND">받은 날부터 30일 · 참여 쿠폰은 5,000원 이상 주문 시</span></div>
+<p class="lead"><b id="handDate"><span class="nb">○월 ○일</span></b>에 건네셨다고 알려주셨어요.<br>이제 더 하실 일은 없어요.</p>
+<ul class="note2 dl"><li>참여 쿠폰은 <span class="hl"><span data-cfg="PAY_DAYS">영업일 3일</span> 안에</span> 쿠폰함으로 보내 드려요</li><li>사장님이 편지를 보고 연락하시면 <b>10,000원 쿠폰</b>을 더 드려요</li><li>사장님 연락이 오면 카카오톡으로 알려드릴게요</li></ul>
+<div class="live gray"><i></i>잘못 고르셨다면 <span class="link2" onclick="back()">고치기</span></div>
+<div class="cpp"><div class="k a"><img class="bg" src="assets/img/coupon_a_bg.jpg" alt=""><div class="txt"><span class="s">편지를 건네고 알려주시면</span><div class="v">참여 쿠폰</div><div class="d">사장님 연락이 없어도 드려요</div></div><img class="ic" src="assets/img/coupon_a_icon.png" alt=""></div><div class="k b"><img class="bg" src="assets/img/coupon_b_bg.jpg" alt=""><div class="txt"><span class="s">사장님이 패스오더에 연락하시면</span><div class="v">10,000원</div><div class="d">쿠폰 1장 더 드려요</div></div><img class="ic" src="assets/img/coupon_b_icon.png" alt=""></div></div>
+
 
 </div></section>
 

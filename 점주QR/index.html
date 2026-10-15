@@ -305,6 +305,13 @@ p,.lead,.sub,.fn,.note,.note2,.cond,.say,.qt,.pt,.bf span,.vc span,.cm .p .t spa
 .pad{padding-bottom:180px}
 .sheet{max-height:88vh;max-height:88dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 #main .bar{box-shadow:0 -6px 18px rgba(60,40,10,.06)}
+.hl{font-weight:700;color:var(--ink);background:linear-gradient(transparent 58%,#FFDCC6 58%);padding:0 2px}
+.bf>div>span span.hl,.pt span.hl,.lead span.hl{display:inline;font-size:inherit;line-height:inherit;color:var(--ink);font-weight:700}
+ul.legal{list-style:none;padding:0;margin:6px 0 0 24px}ul.legal li{position:relative;padding-left:12px}ul.legal li:before{content:"·";position:absolute;left:0;font-weight:700}
+ul.dl{list-style:none;margin:0}ul.dl li{position:relative;padding-left:12px}ul.dl li+li{margin-top:4px}ul.dl li:before{content:"·";position:absolute;left:1px;font-weight:700}
+.note2{background:var(--soft);border-radius:12px;padding:14px 16px;font-size:15px;line-height:23px;color:var(--ink2);margin-top:18px;text-align:left}.note2 b{color:var(--ink);font-weight:700}
+.note2 span.hl{display:inline;font-size:inherit;line-height:inherit;color:var(--ink);font-weight:700}
+.hl{padding:0 2px;margin:0 -2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 
 /* 편지코드로 값을 받아 오는 동안 매장명 · 닉네임 자리를 잠깐 가린다 */
 html.ld .store,html.ld .nick,html.ld .due{color:transparent!important;background:#EDE7E2;border-radius:4px}
@@ -315,8 +322,8 @@ html.ld .store,html.ld .nick,html.ld .due{color:transparent!important;background
 <!-- 1 앱으로 주문하는 손님들이 찾고 있어요 -->
 <div class="kicker" style="margin-top:18px"><span class="store">패스카페</span> 손님들의 요청</div>
 <div class="h1">사장님,<br>앱으로 주문하는 손님들이<br><em><span class="store">패스카페</span>를 찾고 있어요</em></div>
-<div class="stats"><div><b><span class="n132">132</span>명</b><span>앱에서 <span class="store">패스카페</span>를<br>찾아봤어요</span></div><div><b><span class="n9">9</span>명</b><span>앱 주문을<br>요청했어요</span></div></div>
-<p class="pt" style="margin-top:12px"><b>전화나 줄 서기 대신 앱으로 주문하는 분들이에요.</b></p>
+<div class="stats"><div><b><span class="n132">132</span>명</b><span>패스오더 앱에서<br>찾아봤어요</span></div><div><b><span class="n9">9</span>명</b><span>앱 주문을<br>요청했어요</span></div></div>
+<p class="pt" style="margin-top:12px">전화나 줄 서기 대신 <span class="hl">앱으로 주문하는</span> 분들이에요.</p>
 
 <div class="sec" style="margin-top:26px"><div class="h2">손님들이 이렇게 말했어요</div>
 <div class="card hi">
@@ -325,7 +332,7 @@ html.ld .store,html.ld .nick,html.ld .due{color:transparent!important;background
 </div>
 <div class="vh">앱 주문을 요청한 손님</div>
 <div class="voices" id="voices"></div>
-<div class="cpn"><div class="t">사장님이 문의하시면<br><span class="nick">라떼좋아</span>님께 <em><span class="nb">감사 쿠폰</span></em>이 가요</div><div class="d"><span class="due">11월 26일</span>까지 · 전화 안내만 신청하셔도 돼요</div></div>
+<div class="cpn"><div class="t">전화 안내를 신청하시면<br><span class="nick">라떼좋아</span>님께 <em><span class="nb">감사 쿠폰</span></em>이 가요</div><div class="d"><span class="due">11월 26일</span>까지 신청해 주세요</div></div>
 </div>
 
 <!-- 2 지금 앱에서는 -->
@@ -335,21 +342,21 @@ html.ld .store,html.ld .nick,html.ld .due{color:transparent!important;background
 <div class="arr">→</div>
 <div class="appc on"><div class="chrome"><span>‹</span><b>더보기</b><span></span></div><div class="filt"><span>전화매장</span><span class="on">가까운 순 ⌄</span><span>영업 중</span></div><div class="sf"><div class="sign"><span class="store">패스카페</span></div><div class="awn"></div><div class="win"></div><div class="door"></div><div class="board"></div><div class="bg ev">⚡ 매장이벤트</div><div class="bg pt2">P 적립</div></div><div class="info"><div class="rc">5분 후 수령</div><div class="nm"><span class="store">패스카페</span></div><div class="meta">⭐ 주문 시작 · 신규</div><div class="meta">📍 136.2m · 걸어서 2분</div><div class="tag">먹고가요</div><div class="go">주문하기</div></div><div class="lb">시작하면 이렇게 · 예시</div></div>
 </div>
-<div class="lost"><div class="big"><span class="nelse">47</span>명</div><div><b><span class="store">패스카페</span>를 찾아본 날,<br>다른 가게에서 주문했어요</b><span>찾아본 <span class="n132">132</span>명 중 · 앱 주문 기록</span></div></div></div>
+<div class="lost"><div class="big"><span class="nelse">47</span>명</div><div><b><span class="store">패스카페</span>를 찾아본 날,<br>다른 가게에서 주문했어요</b><span>찾아본 <span class="n132">132</span>명 중 · 주문 기록 기준</span></div></div></div>
 
 <!-- 3 이 편지를 받은 사장님께만 -->
-<div class="sec"><div class="k"><span class="store">패스카페</span>가 시작하면</div><div class="h2">시작하시면<br>이렇게 달라져요</div>
+<div class="sec"><div class="k">앱 주문을 시작하면</div><div class="h2">패스오더를 시작하시면<br>이렇게 달라져요</div>
 <div class="gain">
-<div class="bf"><div class="ic">1</div><div><b>찾아본 손님 <b class="n132" style="display:inline">132</b>명을<br>첫 손님으로 모셔 와요</b><span>시작하는 날, 이분들께 소식과<br>첫 주문 쿠폰을 보내드려요.<br>쿠폰 비용은 패스오더가 내요.</span>
+<div class="bf"><div class="ic">1</div><div><b>찾아본 손님 <b class="n132" style="display:inline">132</b>명을<br>첫 손님으로 모셔 와요</b><span>시작하는 날 이분들께 <span class="hl">소식과 첫 주문 쿠폰</span>을 보내드려요.<br>쿠폰 비용은 패스오더가 내요.</span>
 <div class="flow"><div class="fcol"><b class="n132">132</b><span>찾아본 손님</span><b class="n9" style="margin-top:8px">9</b><span>요청한 손님</span></div><div class="farr"><div class="msg">오픈 소식<br>+ 쿠폰</div><i></i><small>패스오더가<br>보내드려요</small></div><div class="fcol dst"><em><img src="assets/img/flow_cup.png" alt=""></em><b style="font-size:16px"><span class="store">패스카페</span></b><span>앱으로 첫 주문</span></div></div></div></div>
-<div class="bf"><div class="ic">2</div><div><b>앱으로 미리 주문받아요</b><span>전화 받느라 손 멈추지 않아도 돼요.<br>손님은 기다리지 않고 픽업해요.</span></div></div>
-<div class="bf"><div class="ic">3</div><div><b>부담 없이 써 보고 정하세요</b><span>기기 안 사도 되고, 약정도 없어요.<br>메뉴 등록은 패스오더가 해 드려요.</span></div></div>
+<div class="bf"><div class="ic">2</div><div><b>앱으로 미리 주문받아요</b><span><span class="hl">전화 받느라 손 멈추지 않아도</span> 돼요.<br>손님은 기다리지 않고 픽업해요.</span></div></div>
+<div class="bf"><div class="ic">3</div><div><b>부담 없이 써 보세요</b><span><span class="hl">기기도 약정도 없어요</span>.<br>메뉴 등록은 패스오더가 해 드려요.</span></div></div>
 </div>
 </div>
 
 <!-- 4 마무리 -->
 <div class="sec"><div class="fin">
-<div class="h2" style="margin-bottom:6px">찾아온 <b class="n132">132</b>명,<br>이제 <span class="store">패스카페</span>에서 받으세요</div>
+<div class="h2" style="margin-bottom:6px">찾아본 <b class="n132">132</b>명의 주문,<br>이제 <span class="store">패스카페</span>에서 받으세요</div>
 <svg class="flowsvg" viewBox="0 0 320 216" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="찾아본 손님 132명이 지금은 다른 가게로, 시작하면 패스카페로">
 <text x="57" y="30" text-anchor="middle" font-size="11" font-weight="800" fill="#5B554E">찾아본 손님</text>
 <image href="assets/img/crowd.png" x="4" y="40" width="106" height="95"/>
@@ -374,9 +381,9 @@ html.ld .store,html.ld .nick,html.ld .due{color:transparent!important;background
 <!-- 접수 완료 -->
 <section id="done" hidden><div class="pad">
 <div class="done"><div class="ck">✓</div><div class="h1">접수됐어요</div>
-<p class="lead"><span data-cfg="CALL_DAYS">영업일 1일</span> 안에 패스오더 담당자가 전화드려요.<br>고르신 시간은 <b id="tm2"><span class="nb">오후 2시~4시</span></b>예요.<br><span class="nick">라떼좋아</span>님께는 <span class="nb">감사 쿠폰</span>을 보내드릴게요.</p></div>
-<div class="one"><div>통화 편한 시간 <b id="tm"><span class="nb">오후 2시~4시</span></b></div></div>
-<div class="sub" style="text-align:center;margin-top:16px">더 하실 일은 없어요. 궁금한 건 통화 때 편하게 물어보세요.</div>
+</div>
+<ul class="note2 dl"><li><span class="hl"><span data-cfg="CALL_DAYS">영업일 1일</span> 안에</span> 패스오더 담당자가 전화드려요</li><li>통화 편한 시간 <b id="tm2"><span class="nb">오후 2시~4시</span></b></li><li><span class="nick">라떼좋아</span>님께는 <b>감사 쿠폰</b>을 보내드릴게요</li></ul><b id="tm" hidden></b>
+<div class="sub" style="text-align:center;margin-top:16px">더 하실 일은 없어요.<br>궁금한 건 통화 때 편하게 물어보세요.</div>
 </div></section>
 
 <div class="dim" id="dim" hidden onclick="closeSheet()"></div>
@@ -386,7 +393,7 @@ html.ld .store,html.ld .nick,html.ld .due{color:transparent!important;background
 <div class="h" style="margin-top:14px;font-size:15px">통화 편한 시간</div>
 <div class="tg"><label><input type="radio" name="t" value="오전 10시~12시"><span class="nb">오전 10시~12시</span></label><label><input type="radio" name="t" value="오후 2시~4시" checked><span class="nb">오후 2시~4시</span></label><label><input type="radio" name="t" value="오후 4시~6시"><span class="nb">오후 4시~6시</span></label><label><input type="radio" name="t" value="저녁 6시 이후"><span class="nb">저녁 6시 이후</span></label></div>
 <label class="agree"><input type="checkbox" id="agree"><span><b>[필수]</b> 전화 안내를 위한 개인정보 수집·이용에 동의합니다</span></label>
-<div class="legal">· 수집 항목: 전화번호, 통화 편한 시간<br>· 수집·이용 목적: 패스오더 도입 안내 전화<br>· 보유 기간: 안내 완료 후 즉시 파기</div>
+<ul class="legal"><li>수집 항목: 전화번호, 통화 편한 시간</li><li>수집·이용 목적: 패스오더 도입 안내 전화</li><li>보유 기간: 안내 완료 후 즉시 파기</li></ul>
 <div class="err" id="err" hidden></div>
 <button class="btn" id="sbtn" style="margin-top:14px" onclick="submit()">전화 안내 신청하기 &gt;</button>
 </div>

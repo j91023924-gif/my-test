@@ -210,6 +210,22 @@ html.f2 .h1{font-family:"Cafe24 Ssurround","Pretendard Variable",Pretendard,sans
 .agree{display:flex;gap:8px;align-items:flex-start;text-align:left;margin-top:16px;font-size:15px;line-height:23px;color:var(--ink)}.agree input{margin:3px 0 0}.agree b{font-weight:600;color:var(--ink3)}
 .legal{margin:8px 0 0 24px;font-size:14px;line-height:22px;color:var(--ink2);text-align:left}.legal a{color:var(--or2);font-weight:700}
 .beat>p{font-size:15px;line-height:23px;color:var(--ink2);font-weight:400}
+.lead b,.beat>p b,.cm .p .t span b,.done .lead b{font-weight:700;color:var(--ink)}
+.cm .p .t span b{display:inline;font-size:inherit;line-height:inherit;margin:0}
+.sub2{font-size:14px;line-height:22px;color:var(--ink3);margin:-6px 0 0}
+.lead{margin-bottom:12px}
+.beat>p b{color:var(--or-text)}
+.hl{font-weight:700;color:var(--ink);background:linear-gradient(transparent 58%,#FFDCC6 58%);padding:0 2px}
+.beat>p .hl{color:var(--or-text)}
+.cm .p .t span span.hl,.lead span.hl,.note2 span.hl{display:inline;font-size:inherit;line-height:inherit;margin:0;color:var(--ink)}
+ul.legal{list-style:none;padding:0}ul.legal li{position:relative;padding-left:12px}ul.legal li:before{content:"·";position:absolute;left:0;font-weight:700}
+ul.dl{list-style:none;padding:0}ul.dl li{position:relative;padding-left:12px}ul.dl li+li{margin-top:2px}ul.dl li:before{content:"·";position:absolute;left:1px;font-weight:700}
+ul.cond.dl li:first-child b{color:var(--ink)}
+ul.note2.dl{padding:12px 14px 12px 16px}ul.cond.dl{font-weight:400;color:var(--ink3);font-size:13.5px;line-height:21px}ul.cond.dl li b{font-weight:700;color:var(--ink)}
+.beat{text-align:left}.beat>p{margin:0 0 8px!important}
+.cm .p .t span br{display:block;content:"";margin-top:2px}
+.hl{padding:0 2px;margin:0 -2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.beat{margin-top:12px!important}
 
 /* 개인화 값을 받아 오는 동안 매장명 · 닉네임 자리를 잠깐 가린다 */
 html.ld .store,html.ld .nick,html.ld .cnt,html.ld [data-src]{color:transparent!important;background:#EDE7E2;border-radius:4px}
@@ -220,20 +236,21 @@ html.ld .store,html.ld .nick,html.ld .cnt,html.ld [data-src]{color:transparent!i
 <div class="nav">패스오더 · 편지 신청</div>
 <div class="pad">
 <div class="h1">다음에 <span class="store">패스카페</span>에 들르실 때,<br>사장님께 편지 한 통을<br><em>건네 주시겠어요?</em></div>
-<p class="lead"><span data-src>패스오더에서 이 카페에 전화하신 적 있는</span> <span class="nick">라떼좋아</span>님께 작은 부탁이 있어요.</p>
-<p class="lead">패스오더에도 이 카페를 찾는 손님들이 있다는 소식을 사장님께 전하고 싶어요. 편지에는 패스오더 소개도 함께 담았어요.<br>편지는 저희가 써서 우편으로 보내드릴게요.</p>
+<p class="lead"><span data-src>패스오더에서 이 카페에 전화하신 적 있는</span> <b><span class="nick">라떼좋아</span>님께</b> 작은 부탁이 있어요.</p>
+<p class="lead"><span class="hl">이 카페를 찾는 손님들이 패스오더에도 있다</span>는 소식을 사장님께 전하고 싶어요.</p>
+<p class="sub2">편지는 저희가 써서 우편으로 보내드려요.<br>패스오더 소개도 함께 담겨요.</p>
 
 <div class="sech"><span>1</span><b>편지를 건네주시면 쿠폰을 드려요</b></div>
 
-<div class="beat"><p style="margin:0 0 4px">편지를 건네고 건넨 날을 알려주시면 참여 쿠폰을 드리고, 사장님이 편지 속 QR로 패스오더에 연락하시면 10,000원 쿠폰을 더 드려요.</p><div class="cpp"><div class="k a"><img class="bg" src="assets/img/coupon_a_bg.jpg" alt=""><div class="txt"><span class="s">편지를 건네고 알려주시면</span><div class="v">참여 쿠폰</div><div class="d">사장님이 연락하지 않으셔도 드려요</div></div><img class="ic" src="assets/img/coupon_a_icon.png" alt=""></div><div class="k b"><img class="bg" src="assets/img/coupon_b_bg.jpg" alt=""><div class="txt"><span class="s">사장님이 패스오더에 연락하시면</span><div class="v">10,000원</div><div class="d">쿠폰 1장 더 드려요</div></div><img class="ic" src="assets/img/coupon_b_icon.png" alt=""></div></div></div>
+<div class="beat"><p style="margin:0 0 4px">편지를 건네고 알려주시면 <span class="hl">참여 쿠폰</span><br>사장님이 연락하시면 <span class="hl">10,000원 쿠폰</span>까지</p><div class="cpp"><div class="k a"><img class="bg" src="assets/img/coupon_a_bg.jpg" alt=""><div class="txt"><span class="s">편지를 건네고 알려주시면</span><div class="v">참여 쿠폰</div><div class="d">사장님 연락이 없어도 드려요</div></div><img class="ic" src="assets/img/coupon_a_icon.png" alt=""></div><div class="k b"><img class="bg" src="assets/img/coupon_b_bg.jpg" alt=""><div class="txt"><span class="s">사장님이 패스오더에 연락하시면</span><div class="v">10,000원</div><div class="d">쿠폰 1장 더 드려요</div></div><img class="ic" src="assets/img/coupon_b_icon.png" alt=""></div></div></div>
 
 
-<div class="cond">쿠폰은 패스오더 입점 카페 어디서나 쓰는 앱 쿠폰 · <span data-cfg="COUPON_COND">받은 날부터 30일 · 참여 쿠폰은 5,000원 이상 주문 시</span></div>
+
 <div class="sech"><span>2</span><b>이렇게 참여해요</b></div>
 <div class="cm v3">
-<div class="p"><div class="im"><img src="assets/img/step1.jpg" alt=""><div class="n">1</div></div><div class="t"><b>편지를 받아요</b><span>받기 편한 주소를 알려주시면 저희가 보내드릴게요</span></div></div>
-<div class="p"><div class="im"><img src="assets/img/step2.jpg" alt=""><div class="n">2</div></div><div class="t"><b>봉투를 적고 건네요</b><span>봉투에 「사장님께」와 이름이나 닉네임을 적고, 편지를 받은 날부터 2주 안에 사장님이나 직원분께 건네 주세요. 설명은 안 하셔도 돼요</span></div></div>
-<div class="p"><div class="im"><img src="assets/img/step3.jpg" alt=""><div class="n">3</div></div><div class="t"><b>건넨 날을 알려주세요</b><span>건넨 뒤 카카오톡 안내 페이지에서 건넨 날짜와 누구에게 건넸는지 골라 주시면 <i data-cfg="PAY_DAYS" style="font-style:normal">영업일 3일</i> 안에 참여 쿠폰을 쿠폰함에 넣어 드려요</span></div></div>
+<div class="p"><div class="im"><img src="assets/img/step1.jpg" alt=""><div class="n">1</div></div><div class="t"><b>편지를 받아요</b><span><span class="hl">주소만 알려주시면</span> 저희가 우편으로 보내드려요</span></div></div>
+<div class="p"><div class="im"><img src="assets/img/step2.jpg" alt=""><div class="n">2</div></div><div class="t"><b>봉투에 적고 건네요</b><span>봉투에 「사장님께」와 이름을 적고,<br><span class="hl">받은 날부터 2주 안에</span> 사장님이나 직원분께 건네요</span></div></div>
+<div class="p"><div class="im"><img src="assets/img/step3.jpg" alt=""><div class="n">3</div></div><div class="t"><b>건넨 날을 알려주세요</b><span>편지가 도착하면 카카오톡으로 안내를 보내드려요.<br>거기서 <span class="hl">건넨 날</span>을 알려주시면<br><span class="hl"><i data-cfg="PAY_DAYS" style="font-style:normal">영업일 3일</i> 안에</span> 참여 쿠폰이 들어가요</span></div></div>
 </div>
 
 </div>
@@ -246,15 +263,15 @@ html.ld .store,html.ld .nick,html.ld .cnt,html.ld [data-src]{color:transparent!i
 <div class="pad">
 <div class="h1" style="font-size:24px">어디로 보내드릴까요?</div>
 <p class="lead" style="margin-top:-6px">받으실 이름과 주소를 알려주세요.</p>
-<div class="note2">✉️ 편지는 저희가 써서 봉투에 넣어 보내드릴게요. 편지 끝에는 「<b><span class="nick">라떼좋아</span> 드림</b>」처럼 앱 닉네임으로 서명해요.<br>우편 받을 이름과 주소는 발송에만 쓰고, 사장님께 전할 편지와 봉투에는 넣지 않아요.</div>
+<div class="note2">✉️ 편지는 저희가 써서 보내드려요.</div>
 <input type="hidden" id="nick" value="라떼좋아">
 <div class="grp"><div class="lb">우편 받을 이름</div><input class="inp" id="name" placeholder="받으실 분 이름" autocomplete="name"></div>
-<div class="grp"><div class="lb">우편 받을 주소<small>집이 아니어도 직접 받으실 수 있는 곳이면 괜찮아요</small></div><div style="display:flex;gap:8px"><input class="inp" id="zip" placeholder="우편번호" readonly onclick="findAddr()"><button type="button" class="btn g" style="width:auto;height:auto;padding:0 16px;font-size:14px;flex:0 0 auto" onclick="findAddr()">주소 찾기</button></div><input class="inp" id="addr" style="margin-top:8px" placeholder="도로명 주소" readonly onclick="findAddr()"><input class="inp" id="addr2" style="margin-top:8px" placeholder="상세 주소 (동 · 호수)"></div>
+<div class="grp"><div class="lb">우편 받을 주소<small>집이 아니어도 직접 받으실 수 있는 곳이면 괜찮아요</small></div><input type="hidden" id="zip"><div style="display:flex;gap:8px"><input class="inp" id="addr" placeholder="도로명 주소" readonly onclick="findAddr()"><button type="button" class="btn g" style="width:auto;height:auto;padding:0 16px;font-size:14px;flex:0 0 auto" onclick="findAddr()">주소 찾기</button></div><input class="inp" id="addr2" style="margin-top:8px" placeholder="상세 주소 (동 · 호수)"></div>
 <label class="tiny agree"><input type="checkbox" id="agree"><span><b>[필수]</b> 편지 우편 발송을 위한 개인정보 수집·이용에 동의합니다</span></label>
-<div class="legal">· 수집 항목: 우편 받을 이름, 배송지 주소<br>· 수집·이용 목적: 편지 우편 발송<br>· 보유 기간: 발송 완료 후 즉시 파기</div>
-<div class="note2" style="margin-top:14px">편지를 건네고 알려주시면 <b>참여 쿠폰</b>을 드려요.<br>사장님이 편지 속 QR로 패스오더에 연락하시면 <b>10,000원 쿠폰</b>을 더 드려요.</div>
+<ul class="legal"><li>수집 항목: 우편 받을 이름, 배송지 주소</li><li>수집·이용 목적: 편지 우편 발송</li><li>보유 기간: 발송 완료 후 즉시 파기</li></ul>
+<ul class="note2 dl" style="margin-top:14px"><li>편지를 건네고 알려주시면 <b>참여 쿠폰</b>을 드려요</li><li>사장님이 편지를 보고 연락하시면 <b>10,000원 쿠폰</b>을 더 드려요</li></ul>
 </div>
-<div class="bar"><div class="note">편지를 받으시면 그날부터 2주 안에 <span class="store">패스카페</span>에 전해 주시겠어요?</div><div class="tiny" id="err" hidden style="color:#C4541A;margin:0 0 8px"></div><button class="btn" id="submit" onclick="submitForm()">편지 신청 완료하기 &gt;</button></div>
+<div class="bar"><div class="note">편지를 받으시면 2주 안에 <span class="store">패스카페</span>에 전해 주시겠어요?</div><div class="tiny" id="err" hidden style="color:#C4541A;margin:0 0 8px"></div><button class="btn" id="submit" onclick="submitForm()">편지 신청 완료하기 &gt;</button></div>
 </section>
 
 <!-- ========== 완료 ========== -->
@@ -263,10 +280,10 @@ html.ld .store,html.ld .nick,html.ld .cnt,html.ld [data-src]{color:transparent!i
 <div class="pad done">
 <div class="ck">✓</div>
 <div class="h1" style="font-size:24px;margin:0 0 10px">편지 신청을 잘 받았어요</div>
-<p class="lead">편지는 신청 마감 뒤 <span data-cfg="SEND_DAYS">영업일 3일</span> 안에 우편으로 보내드릴 예정이에요.<br>보내고 나면 카카오톡으로 알려드릴게요.</p>
+<p class="lead"><span id="closeTxt">신청 마감</span> 뒤 <span class="hl"><span data-cfg="SEND_DAYS">영업일 3일</span> 안에</span> 우편으로 보내드려요.<br>보내고 나면 카카오톡으로 알려드릴게요.</p>
 
-<div class="cpp"><div class="k a"><img class="bg" src="assets/img/coupon_a_bg.jpg" alt=""><div class="txt"><span class="s">편지를 건네고 알려주시면</span><div class="v">참여 쿠폰</div><div class="d">사장님이 연락하지 않으셔도 드려요</div></div><img class="ic" src="assets/img/coupon_a_icon.png" alt=""></div><div class="k b"><img class="bg" src="assets/img/coupon_b_bg.jpg" alt=""><div class="txt"><span class="s">사장님이 패스오더에 연락하시면</span><div class="v">10,000원</div><div class="d">쿠폰 1장 더 드려요</div></div><img class="ic" src="assets/img/coupon_b_icon.png" alt=""></div></div>
-<div class="note2" style="text-align:left">편지를 받으시면 그날부터 2주 안에<br><b><span class="store">패스카페</span> 사장님이나 직원분께</b> 건네 주시겠어요?<br>건네신 뒤 카카오톡 안내에서 건넨 날을 알려주시면 참여 쿠폰을 드려요.</div>
+<div class="cpp"><div class="k a"><img class="bg" src="assets/img/coupon_a_bg.jpg" alt=""><div class="txt"><span class="s">편지를 건네고 알려주시면</span><div class="v">참여 쿠폰</div><div class="d">사장님 연락이 없어도 드려요</div></div><img class="ic" src="assets/img/coupon_a_icon.png" alt=""></div><div class="k b"><img class="bg" src="assets/img/coupon_b_bg.jpg" alt=""><div class="txt"><span class="s">사장님이 패스오더에 연락하시면</span><div class="v">10,000원</div><div class="d">쿠폰 1장 더 드려요</div></div><img class="ic" src="assets/img/coupon_b_icon.png" alt=""></div></div>
+<ul class="note2 dl" style="text-align:left"><li>편지를 받으시면 <span class="hl">2주 안에</span> <span class="store">패스카페</span> 사장님이나 직원분께 건네 주세요</li><li>건넨 날을 알려주시면 <span class="hl">참여 쿠폰</span>을 드려요</li></ul>
 
 </div>
 <div class="bar"><button class="btn g" onclick="go('v-land')">참여 안내 다시 보기</button></div>
@@ -314,6 +331,7 @@ function go(id){
 }
 render();
 personalize();
+{const c=Q.get('close');if(c){const d=new Date(c+'T00:00:00');if(!isNaN(d))document.getElementById('closeTxt').textContent=(d.getMonth()+1)+'월 '+d.getDate()+'일 신청 마감';}} // 링크의 close=YYYY-MM-DD
 document.querySelectorAll('[data-cfg]').forEach(e=>{if(CONFIG[e.dataset.cfg])e.textContent=CONFIG[e.dataset.cfg];});
 
 function findAddr(){new daum.Postcode({oncomplete:d=>{zip.value=d.zonecode;addr.value=d.roadAddress||d.jibunAddress;addr2.focus();}}).open();}

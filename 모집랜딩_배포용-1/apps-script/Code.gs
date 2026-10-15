@@ -2,31 +2,59 @@
 // 배포: 확장 프로그램 → Apps Script → 이 코드 붙여넣기 → 배포 → 새 배포 → 웹 앱
 //       (실행 계정: 나, 액세스 권한: 모든 사용자) → 웹 앱 URL을 config.js의 SUBMIT_URL에 넣기
 //
+// 개인화: 메시지 링크에는 ?t=열쇠 하나만 붙인다. 열쇠로 「모집대상」 시트를 찾아
+//   - GET  : 화면에 쓸 매장명 · 닉네임 · 요청 수 · 첫 참여만 돌려준다 (회원ID 등은 밖으로 내보내지 않음)
+//   - POST : 방문 · 신청을 기록할 때 회원ID · 매장ID · 소구 · 경로 · 매장명을 시트 값으로 채운다
+//
 // 페이지가 보내는 요청 (type)
 //   visit : 페이지를 열었을 때 → 「방문」에 한 줄 추가
 //   step  : 신청 화면으로 넘어갔을 때 → 「방문」의 도달 단계 갱신
 //   apply : 신청했을 때 (type 없는 예전 요청도 신청으로 처리) → 「신청」에 한 줄 추가 + 「방문」 갱신
 
-var APPLY_HEAD = ['신청번호', '신청시각', '진입시각', '소요시간(초)', '회원ID', '소구', '경로', '매장', '표시 숫자', '첫 참여', '닉네임', '닉네임 변경', '받는 분', '우편번호', '주소', '상세 주소', '기기', '열린 앱', '유입 URL', '요일', '시간대', '중복 신청', '처리상태', '편지 발송일', '운송장번호', '사장님 문의 여부', '참여쿠폰 지급일', '성공쿠폰 지급일', '메모'];
-var VISIT_HEAD = ['방문ID', '진입시각', '회원ID', '소구', '경로', '매장', '기기', '열린 앱', '도달 단계', '신청화면 진입시각', '신청시각', '유입 URL'];
+var APPLY_HEAD = ['신청번호', '신청시각', '진입시각', '소요시간(초)', '회원ID', '열쇠', '매장ID', '소구', '경로', '매장', '표시 숫자', '첫 참여', '닉네임', '닉네임 변경', '받는 분', '우편번호', '주소', '상세 주소', '기기', '열린 앱', '유입 URL', '요일', '시간대', '중복 신청', '처리상태', '편지 발송일', '운송장번호', '사장님 문의 여부', '참여쿠폰 지급일', '성공쿠폰 지급일', '메모'];
+var VISIT_HEAD = ['방문ID', '진입시각', '회원ID', '열쇠', '매장ID', '소구', '경로', '매장', '기기', '열린 앱', '도달 단계', '신청화면 진입시각', '신청시각', '유입 URL'];
+var STEP_COL = 11, FORM_AT_COL = 12, APPLY_AT_COL = 13; // 「방문」의 도달 단계 · 신청화면 진입시각 · 신청시각 열
 var STEPS = ['랜딩', '신청화면', '신청완료'];
+
+function doGet(e) {
+  var p = target((e.parameter || {}).t);
+  var out = p ? { ok: true, store: p.store, nick: p.nick, n: p.n, first: p.first } : { ok: false };
+  return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
+}
 
 function doPost(e) {
   var d = JSON.parse(e.postData.contents);
+  var p = target(d.t);
+  if (p) { d.uid = p.uid; d.sid = p.sid; d.g = p.g; d.src = p.src; d.store = p.store; }
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
     if (d.type === 'visit') addVisit(d);
-    else if (d.type === 'step') updateVisit(d, '신청화면', 10);
-    else { addApply(d); updateVisit(d, '신청완료', 11); }
+    else if (d.type === 'step') updateVisit(d, '신청화면', FORM_AT_COL);
+    else { addApply(d); updateVisit(d, '신청완료', APPLY_AT_COL); }
   } finally {
     lock.releaseLock();
   }
   return ContentService.createTextOutput('ok');
 }
 
+// 「모집대상」: 열쇠 · 회원ID · 매장ID · 매장명 · 닉네임 · 요청 수 · 첫 참여 · 소구 · 경로 · 발송시각
+function target(t) {
+  if (!t) return null;
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('모집대상');
+  if (!sh) return null;
+  var found = sh.getRange('A:A').createTextFinder(String(t)).matchEntireCell(true).matchCase(true).findNext();
+  if (!found || found.getRow() === 1) return null;
+  var r = sh.getRange(found.getRow(), 1, 1, 9).getValues()[0];
+  return {
+    uid: String(r[1]), sid: String(r[2]), store: String(r[3]), nick: String(r[4]),
+    n: r[5] === '' ? null : Number(r[5]), first: String(r[6]).toUpperCase() !== 'N',
+    g: String(r[7]), src: String(r[8])
+  };
+}
+
 // 손님이 입력한 값은 글자로 고정한다 (우편번호 앞자리 0 유지, '='로 시작하는 값이 수식으로 바뀌지 않게)
-function txt(v) { return v ? "'" + v : ''; }
+function txt(v) { return v === undefined || v === null || v === '' ? '' : "'" + v; }
 function at(iso) { return iso ? new Date(iso) : ''; }
 
 function sheet(name, head) {
@@ -43,8 +71,8 @@ function addApply(d) {
   sh.getRange(r, 1, 1, APPLY_HEAD.length).setValues([[
     txt(d.vid), at(d.ts), at(d.t0),
     '=IF(C' + r + '="","",ROUND((' + B + '-C' + r + ')*86400))',
-    txt(d.uid), txt(d.g), txt(d.src), txt(d.store),
-    d.n === undefined ? '' : d.n,
+    txt(d.uid), txt(d.t), txt(d.sid), txt(d.g), txt(d.src), txt(d.store),
+    d.n === undefined || d.n === null ? '' : d.n,
     d.first === undefined ? '' : (d.first ? 'Y' : 'N'),
     txt(d.nick),
     d.nickChanged === undefined ? '' : (d.nickChanged ? 'Y' : 'N'),
@@ -60,7 +88,7 @@ function addApply(d) {
 function addVisit(d) {
   var sh = sheet('방문', VISIT_HEAD);
   sh.getRange(sh.getLastRow() + 1, 1, 1, VISIT_HEAD.length).setValues([[
-    txt(d.vid), at(d.ts), txt(d.uid), txt(d.g), txt(d.src), txt(d.store),
+    txt(d.vid), at(d.ts), txt(d.uid), txt(d.t), txt(d.sid), txt(d.g), txt(d.src), txt(d.store),
     txt(d.device), txt(d.app), '랜딩', '', '', txt(d.ref)
   ]]);
 }
@@ -72,8 +100,8 @@ function updateVisit(d, step, timeCol) {
   var found = sh.getRange('A:A').createTextFinder(d.vid).matchEntireCell(true).findNext();
   if (!found) { addVisit(d); found = sh.getRange('A:A').createTextFinder(d.vid).matchEntireCell(true).findNext(); }
   var r = found.getRow();
-  var cur = sh.getRange(r, 9).getValue();
-  if (STEPS.indexOf(step) > STEPS.indexOf(cur)) sh.getRange(r, 9).setValue(step);
+  var cur = sh.getRange(r, STEP_COL).getValue();
+  if (STEPS.indexOf(step) > STEPS.indexOf(cur)) sh.getRange(r, STEP_COL).setValue(step);
   sh.getRange(r, timeCol).setValue(at(d.ts));
 }
 

@@ -58,10 +58,11 @@ function addApply(d) {
 }
 
 function addVisit(d) {
-  sheet('방문', VISIT_HEAD).appendRow([
+  var sh = sheet('방문', VISIT_HEAD);
+  sh.getRange(sh.getLastRow() + 1, 1, 1, VISIT_HEAD.length).setValues([[
     txt(d.vid), at(d.ts), txt(d.uid), txt(d.g), txt(d.src), txt(d.store),
     txt(d.device), txt(d.app), '랜딩', '', '', txt(d.ref)
-  ]);
+  ]]);
 }
 
 // 방문 행의 도달 단계를 올리고(내리지는 않음) 해당 시각을 적는다. 방문 기록이 없으면 새로 만든다.

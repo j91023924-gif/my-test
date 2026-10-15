@@ -283,7 +283,7 @@ html.ld .store,html.ld .nick{color:transparent!important;background:#EDE7E2;bord
 </div>
 <div class="envw"><div class="envl">봉투 앞면 · 받으신 뒤 펜으로 이렇게 직접 적어요</div>
 <div class="env plain hw"><div class="to2"><span class="w" data-t="사장님께"></span></div><div class="nm2"><span class="w nm" data-t=""></span></div><div class="tip">이 두 줄은 직접 적어요<br>닉네임도 괜찮아요</div><button type="button" class="replay" onclick="hwPlay(true)">다시 보기</button></div></div>
-<div class="due"><span><b style="color:var(--ink);font-size:13.5px"><span class="nb">○월 ○일(○)</span></b>까지 건네 주세요</span><b id="left">14일 남았어요</b></div>
+<div class="due"><span><b style="color:var(--ink);font-size:13.5px"><span class="nb" id="dueLabel">○월 ○일(○)</span></b>까지 건네 주세요</span><b id="left">14일 남았어요</b></div>
 <div class="cpp"><div class="k a"><img class="bg" src="assets/img/coupon_a_bg.jpg" alt=""><div class="txt"><span class="s">편지를 건네주시면</span><div class="v">참여 쿠폰</div><div class="d">사장님이 연락하지 않으셔도 드려요</div></div><img class="ic" src="assets/img/coupon_a_icon.png" alt=""></div><div class="k b"><img class="bg" src="assets/img/coupon_b_bg.jpg" alt=""><div class="txt"><span class="s">사장님이 패스오더에 연락하시면</span><div class="v">10,000원</div><div class="d">쿠폰 1장 더 드려요</div></div><img class="ic" src="assets/img/coupon_b_icon.png" alt=""></div></div>
 <div class="cond"><b>전달 기한 안내</b> 참여 쿠폰은 전달 기한 안에 건네고 「편지 건넸어요」를 눌러 주신 분께 드려요. 기한이 지나면 드리기 어려울 수 있어요.<br>쿠폰은 패스오더 앱에서 주문할 때 쓰는 할인 쿠폰이에요. 참여 쿠폰: <span data-cfg="COUPON_BASE_COND">5,000원 이상 주문 시 · 받은 날부터 30일</span> / 10,000원 쿠폰: <span data-cfg="COUPON_BONUS_COND">최소 주문 없음 · 받은 날부터 30일</span></div>
 
@@ -365,6 +365,7 @@ personalize();
 
 const left=Math.ceil((new Date(DATA.due)-new Date(DATA.today))/864e5);
 document.getElementById('left').textContent=left>0?left+'일 남았어요':'오늘까지예요';
+{const d=new Date(DATA.due+'T00:00:00');document.getElementById('dueLabel').textContent=(d.getMonth()+1)+'월 '+d.getDate()+'일('+'일월화수목금토'[d.getDay()]+')';} // 전달 기한 날짜
 const KEY='letter_done_'+(T||Q.get('uid')||'x');
 const WD='일월화수목금토';
 (function(){const box=document.getElementById('days');const t=new Date(DATA.today);let h='';

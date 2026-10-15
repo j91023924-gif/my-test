@@ -305,6 +305,9 @@ p,.lead,.sub,.fn,.note,.note2,.cond,.say,.qt,.pt,.bf span,.vc span,.cm .p .t spa
 .pad{padding-bottom:180px}
 .sheet{max-height:88vh;max-height:88dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 #main .bar{box-shadow:0 -6px 18px rgba(60,40,10,.06)}
+
+/* 편지코드로 값을 받아 오는 동안 매장명 · 닉네임 자리를 잠깐 가린다 */
+html.ld .store,html.ld .nick,html.ld .due{color:transparent!important;background:#EDE7E2;border-radius:4px}
 </style></head><body><div class="wrap">
 <div class="nav">패스오더 · 앱 주문 요청</div>
 
@@ -382,8 +385,8 @@ p,.lead,.sub,.fn,.note,.note2,.cond,.say,.qt,.pt,.bf span,.vc span,.cm .p .t spa
 <input class="inp" id="tel" type="tel" placeholder="010-0000-0000" inputmode="numeric" autocomplete="tel" maxlength="13" oninput="fmtTel(this)">
 <div class="h" style="margin-top:14px;font-size:15px">통화 편한 시간</div>
 <div class="tg"><label><input type="radio" name="t" value="오전 10시~12시"><span class="nb">오전 10시~12시</span></label><label><input type="radio" name="t" value="오후 2시~4시" checked><span class="nb">오후 2시~4시</span></label><label><input type="radio" name="t" value="오후 4시~6시"><span class="nb">오후 4시~6시</span></label><label><input type="radio" name="t" value="저녁 6시 이후"><span class="nb">저녁 6시 이후</span></label></div>
-<label class="agree"><input type="checkbox" id="agree"><span>전화 안내를 위해 번호를 받는 데 동의해요 <b>(필수)</b></span></label>
-<div class="legal">번호는 페이타랩(패스오더)이 안내 전화에만 쓰고, 안내가 끝나면 지워요.</div>
+<label class="agree"><input type="checkbox" id="agree"><span><b>[필수]</b> 전화 안내를 위한 개인정보 수집·이용에 동의합니다</span></label>
+<div class="legal">· 수집 항목: 전화번호, 통화 편한 시간<br>· 수집·이용 목적: 패스오더 도입 안내 전화<br>· 보유 기간: 안내 완료 후 즉시 파기</div>
 <div class="err" id="err" hidden></div>
 <button class="btn" id="sbtn" style="margin-top:14px" onclick="submit()">전화 안내 신청하기 &gt;</button>
 </div>
@@ -401,7 +404,12 @@ const R=rng(seedOf(seedKey));
 const _v=+Q.get('v')||between(R,...RANGE.view);
 const _r=+Q.get('r')||between(R,...RANGE.req);
 const _e=+Q.get('e')||Math.round(_v*(RANGE.elseRate[0]+R()*(RANGE.elseRate[1]-RANGE.elseRate[0])));
-const DATA={store:Q.get('store')||'패스카페',nick:Q.get('nick')||'라떼좋아',n_view:_v,n_req:_r,n_else:_e,code:Q.get('c')||'L-0001',due:Q.get('due')||''};
+const C=Q.get('c')||''; // 편지코드(= 신청번호). 매장명 · 손님 닉네임 · 문의 기한은 이 코드로 시트에서 받아 온다
+const DATA={store:Q.get('store')||'패스카페',nick:Q.get('nick')||'라떼좋아',n_view:_v,n_req:_r,n_else:_e,code:C||'L-0001',due:Q.get('due')||''};
+const UA=navigator.userAgent;
+const DEVICE=/iPhone|iPad|iPod/.test(UA)?'iOS':/Android/.test(UA)?'Android':'PC';
+const APP=/KAKAOTALK/i.test(UA)?'카카오톡':/NAVER\(inapp/i.test(UA)?'네이버':/Instagram/i.test(UA)?'인스타그램':/FBAN|FBAV/.test(UA)?'페이스북':'일반 브라우저';
+function post(o){return CONFIG.SUBMIT_URL?fetch(CONFIG.SUBMIT_URL,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify({...o,c:C,device:DEVICE,app:APP,ref:location.href})}):Promise.resolve();}
 // 요청 손님 카드: 앱 「도입 요청」의 이유 4가지(빠른 픽업 · 적립 · 전화보다 쉬움 · 시간 절약)에서만 고름. 최근 90일 안 날짜, 최신순
 const NAMES=['커피','달콤','민트','하루','소소','봄날','라라','모카','연두','단비','초코','구름'];
 const SAYS=[['우리 카페는 패스오더 안 되나요?','기다리지 않고 받아 가고 싶어요'],['점심시간엔 줄이 길어서','미리 주문해 두고 싶어요'],['전화로 주문하기가 좀 불편해요'],['미리 결제하고 바로 받아 가고 싶어요'],['적립도 받으면서 주문하고 싶어요'],['출근길에 들러서 바로 받아 가고 싶어요'],['아이 데리고 오면 기다리기 힘들어요','앱으로 미리 시킬 수 있으면 좋겠어요'],['단체 주문할 때 전화로 하기 번거로워요']];
@@ -424,11 +432,29 @@ const AV=['assets/img/req_av1.png','assets/img/req_av2.png','assets/img/req_av3.
     html+='<div class="vc more"><i>+'+rest+'</i><div><b>'+rest+'명 더</b><span>'+(m1===m2?m1+'월':m1+'월~'+m2+'월')+'에 앱 주문을 요청했어요</span></div></div>';}
   document.getElementById('voices').innerHTML=html;
 }
-{const d=DATA.due?new Date(DATA.due):new Date(Date.now()+21*864e5);document.querySelectorAll('.due').forEach(e=>e.textContent=(d.getMonth()+1)+'월 '+d.getDate()+'일');}
+function renderOwner(){
+  const d=DATA.due?new Date(DATA.due+'T00:00:00'):new Date(Date.now()+21*864e5);document.querySelectorAll('.due').forEach(e=>e.textContent=(d.getMonth()+1)+'월 '+d.getDate()+'일');
+  document.querySelectorAll('.store').forEach(e=>e.textContent=DATA.store);
+  document.querySelectorAll('.nick').forEach(e=>e.textContent=DATA.nick);
+  const svg=document.querySelector('.flowsvg');if(svg)svg.setAttribute('aria-label','찾아본 손님 '+DATA.n_view+'명이 지금은 다른 가게로, 시작하면 '+DATA.store+'로');
+}
+async function personalizeOwner(){
+  if(!C||!CONFIG.SUBMIT_URL)return;
+  document.documentElement.classList.add('ld');
+  try{
+    const ctl=new AbortController();setTimeout(()=>ctl.abort(),6000);
+    const r=await(await fetch(CONFIG.SUBMIT_URL+'?c='+encodeURIComponent(C),{signal:ctl.signal})).json();
+    if(!r.ok)throw 0;
+    DATA.store=r.store||DATA.store;DATA.nick=r.nick||DATA.nick;DATA.due=r.due||DATA.due;
+  }catch(e){DATA.store='사장님 가게';DATA.nick='단골 손님';} // 편지코드가 틀리거나 응답이 없으면 일반 표현
+  renderOwner();
+  document.documentElement.classList.remove('ld');
+}
+renderOwner();
+personalizeOwner();
 document.querySelectorAll('[data-cfg]').forEach(e=>{if(CONFIG[e.dataset.cfg])e.textContent=CONFIG[e.dataset.cfg];});
-document.querySelectorAll('.store').forEach(e=>e.textContent=DATA.store);
-if(CONFIG.SUBMIT_URL&&DATA.code)fetch(CONFIG.SUBMIT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({type:'scan',ts:new Date().toISOString(),code:DATA.code,store:DATA.store,ref:location.href})}).catch(()=>{});
-document.querySelectorAll('.nick').forEach(e=>e.textContent=DATA.nick);
+// QR 접속 기록: 편지코드가 있을 때만 (매장 · 손님은 서버가 편지코드로 채움)
+if(C)post({type:'scan',ts:new Date().toISOString()}).catch(()=>{});
 document.querySelectorAll('.n132').forEach(e=>e.textContent=DATA.n_view);
 document.querySelectorAll('.n9').forEach(e=>e.textContent=DATA.n_req);
 document.querySelectorAll('.nelse').forEach(e=>e.textContent=DATA.n_else);
@@ -449,9 +475,9 @@ function submit(){
   if(v.length<10){er.textContent='전화번호를 확인해 주세요';er.hidden=false;tel.focus();return}
   if(!document.getElementById('agree').checked){er.textContent='동의에 체크해 주세요';er.hidden=false;return}
   const t=document.querySelector('input[name=t]:checked').value;document.getElementById('tm').textContent=t;document.getElementById('tm2').textContent=t;
-  const body={type:'inquiry',ts:new Date().toISOString(),code:DATA.code,store:DATA.store,nick:DATA.nick,tel:v,time:t,ref:location.href};
+  const body={type:'inquiry',ts:new Date().toISOString(),tel:v,time:t};
   // ponytail: Apps Script는 no-cors라 응답을 못 읽음. 시트 「문의」 탭 + 슬랙 알림(매장 · 시간대 · 편지 코드만, 번호는 시트에만)
-  if(CONFIG.SUBMIT_URL)fetch(CONFIG.SUBMIT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)}).catch(()=>{});
+  post(body).catch(()=>{});
   try{localStorage.setItem('po_inq_'+DATA.code,t);}catch(e){}
   closeSheet();document.getElementById('main').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
 }

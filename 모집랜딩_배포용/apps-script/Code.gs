@@ -12,6 +12,11 @@
 //   apply : 신청했을 때 (type 없는 예전 요청도 신청으로 처리) → 「신청」에 한 줄 추가 + 「방문」 갱신
 //   delivered : 「내 편지」에서 「편지 건넸어요」를 눌렀을 때 → 「전달」에 한 줄 추가 + 「모집대상」 전달 기록 Y
 //   letter_view : 「내 편지」를 열었을 때 → 「열람」에 한 줄 추가 + 「모집대상」 내 편지 열람 Y
+//   scan    : 사장님이 편지 QR(점주 페이지)을 열었을 때 → 「QR 접속」에 한 줄 + 「모집대상」 QR 접속 Y
+//   inquiry : 사장님이 전화 안내를 신청했을 때 → 「문의」에 한 줄 + 「모집대상」 사장님 문의 Y
+//
+// 편지 한 통 = 신청 한 건. 편지코드(점주 QR의 ?c=)는 신청번호를 그대로 쓴다.
+// 신청이 들어오면 「편지」 탭에 한 줄이 생기고, 도착일을 적으면 전달 · 문의 기한과 내 편지 · 점주 QR 링크가 자동으로 만들어진다.
 
 var APPLY_HEAD = ['신청번호', '신청시각', '진입시각', '소요시간(초)', '회원ID', '열쇠', '매장ID', '소구', '경로', '매장', '표시 숫자', '첫 참여', '닉네임', '닉네임 변경', '받는 분', '우편번호', '주소', '상세 주소', '기기', '열린 앱', '유입 URL', '요일', '시간대', '중복 신청', '처리상태', '편지 발송일', '운송장번호', '사장님 문의 여부', '참여쿠폰 지급일', '성공쿠폰 지급일', '메모'];
 var VISIT_HEAD = ['방문ID', '진입시각', '회원ID', '열쇠', '매장ID', '소구', '경로', '매장', '기기', '열린 앱', '도달 단계', '신청화면 진입시각', '신청시각', '유입 URL'];
@@ -21,25 +26,44 @@ var DELIV_MARK_COL = 14; // 「모집대상」 N열 「전달 기록」
 var VIEW_HEAD = ['열람시각', '열쇠', '회원ID', '매장ID', '매장', '전달 기한', '이미 기록함', '기기', '열린 앱', '유입 URL'];
 var VIEW_MARK_COL = 15; // 「모집대상」 O열 「내 편지 열람」
 var STEPS = ['랜딩', '신청화면', '신청완료'];
+var LETTER_HEAD = ['신청번호', '신청시각', '열쇠', '매장ID', '매장', '닉네임', '발송일', '운송장번호', '도착일', '전달 기한', '문의 기한', '리마인드 발송일', '내 편지 링크', '점주 QR 링크', '메모'];
+var SCAN_HEAD = ['접속시각', '편지코드', '열쇠', '매장ID', '매장', '손님 전달 기록 있음', '기기', '열린 앱', '유입 URL'];
+var INQ_HEAD = ['접수시각', '편지코드', '열쇠', '매장ID', '매장', '손님 닉네임', '전화번호', '통화 시간대', '매장 첫 문의', '기기', '유입 URL', '처리상태', '첫 통화일', '결과', '성공쿠폰 지급일', '메모'];
+var QR_MARK_COL = 16, INQ_MARK_COL = 17; // 「모집대상」 P열 「QR 접속」 · Q열 「사장님 문의」
+// 링크 주소 (정식 계정으로 옮기면 여기 두 줄만 바꾼다)
+var MYLETTER_URL = 'https://j91023924-gif.github.io/my-test/%EB%82%B4%ED%8E%B8%EC%A7%80/';
+var OWNER_URL = 'https://j91023924-gif.github.io/my-test/%EC%A0%90%EC%A3%BCQR/';
 
 function doGet(e) {
-  var p = target((e.parameter || {}).t);
-  var out = p ? { ok: true, store: p.store, nick: p.nick, n: p.n, first: p.first, src: p.src } : { ok: false };
+  var q = e.parameter || {};
+  var out = { ok: false };
+  if (q.c) {
+    // 점주 페이지: 편지코드로 매장명 · 편지 전한 손님 닉네임 · 문의 기한만 돌려준다
+    var lp = letter(q.c);
+    if (lp) out = { ok: true, store: lp.store, nick: lp.nick, due: lp.due };
+  } else {
+    var p = target(q.t);
+    if (p) out = { ok: true, store: p.store, nick: p.nick, n: p.n, first: p.first, src: p.src };
+  }
   return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
 }
 
 function doPost(e) {
   var d = JSON.parse(e.postData.contents);
+  var lp = d.c ? letter(d.c) : null;
+  if (lp) { d.t = lp.t; d.nick = lp.nick; } // 점주 기록은 편지코드로 손님 열쇠를 찾아 잇는다
   var p = target(d.t);
   if (p) { d.uid = p.uid; d.sid = p.sid; d.g = p.g; d.src = p.src; d.store = p.store; }
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    if (d.type === 'letter_view') { addLetterView(d); markCol(p, VIEW_MARK_COL); }
+    if (d.type === 'scan') { addScan(d); markCol(p, QR_MARK_COL); }
+    else if (d.type === 'inquiry') { addInquiry(d); markCol(p, INQ_MARK_COL); }
+    else if (d.type === 'letter_view') { addLetterView(d); markCol(p, VIEW_MARK_COL); }
     else if (d.type === 'delivered') { addDelivered(d); markCol(p, DELIV_MARK_COL); }
     else if (d.type === 'visit') { addVisit(d); mark(p, 1); }
     else if (d.type === 'step') { updateVisit(d, '신청화면', FORM_AT_COL); mark(p, 2); }
-    else { addApply(d); updateVisit(d, '신청완료', APPLY_AT_COL); mark(p, 3); }
+    else { addApply(d); addLetter(d); updateVisit(d, '신청완료', APPLY_AT_COL); mark(p, 3); }
   } finally {
     lock.releaseLock();
   }
@@ -97,6 +121,51 @@ function addDelivered(d) {
   sh.getRange(sh.getLastRow() + 1, 1, 1, DELIV_HEAD.length).setValues([[
     at(d.ts), txt(d.t), txt(d.uid), txt(d.sid), txt(d.store), txt(d.nick), txt(d.when), txt(d.whom),
     txt(applyNo), txt(d.device), txt(d.app), txt(d.ref), '', ''
+  ]]);
+}
+
+// 「편지」 탭에서 편지코드(= 신청번호)로 한 통을 찾는다
+function letter(c) {
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('편지');
+  if (!sh || !c) return null;
+  var found = sh.getRange('A:A').createTextFinder(String(c)).matchEntireCell(true).matchCase(true).findNext();
+  if (!found || found.getRow() === 1) return null;
+  var r = sh.getRange(found.getRow(), 1, 1, 11).getValues()[0];
+  var due = r[10] instanceof Date ? Utilities.formatDate(r[10], 'Asia/Seoul', 'yyyy-MM-dd') : '';
+  return { row: found.getRow(), t: String(r[2]), sid: String(r[3]), store: String(r[4]), nick: String(r[5]), due: due };
+}
+
+// 신청 한 건 = 편지 한 통. 도착일(I)을 적으면 기한과 링크가 수식으로 채워진다
+function addLetter(d) {
+  var sh = sheet('편지', LETTER_HEAD);
+  var r = sh.getLastRow() + 1, I = 'I' + r, J = 'J' + r;
+  sh.getRange(r, 1, 1, LETTER_HEAD.length).setValues([[
+    txt(d.vid), at(d.ts), txt(d.t), txt(d.sid), txt(d.store), txt(d.nick), '', '', '',
+    '=IF(' + I + '="","",' + I + '+14)',   // 손님 전달 기한: 도착 + 14일
+    '=IF(' + I + '="","",' + I + '+21)',   // 사장님 문의 기한: 도착 + 21일 (미정 · 바뀌면 이 숫자만)
+    '',
+    '=IF(C' + r + '="","","' + MYLETTER_URL + '?t="&C' + r + '&IF(' + J + '="","","&due="&TEXT(' + J + ',"yyyy-mm-dd")))',
+    '=IF(A' + r + '="","","' + OWNER_URL + '?c="&A' + r + ')',
+    ''
+  ]]);
+}
+
+// 점주 페이지를 열 때마다 한 줄. 손님이 건넨 날을 알려주기 전에 열린 건지도 같이 남긴다
+function addScan(d) {
+  var sh = sheet('QR 접속', SCAN_HEAD);
+  var delivered = d.t && sheet('전달', DELIV_HEAD).getRange('B:B').createTextFinder(String(d.t)).matchEntireCell(true).findNext() ? 'Y' : 'N';
+  sh.getRange(sh.getLastRow() + 1, 1, 1, SCAN_HEAD.length).setValues([[
+    at(d.ts), txt(d.c), txt(d.t), txt(d.sid), txt(d.store), delivered, txt(d.device), txt(d.app), txt(d.ref)
+  ]]);
+}
+
+// 전화 안내 신청. 같은 매장의 첫 문의면 「매장 첫 문의」 Y (10,000원 쿠폰 귀속 후보)
+function addInquiry(d) {
+  var sh = sheet('문의', INQ_HEAD);
+  var first = d.sid && sh.getRange('D:D').createTextFinder(String(d.sid)).matchEntireCell(true).findNext() ? 'N' : 'Y';
+  sh.getRange(sh.getLastRow() + 1, 1, 1, INQ_HEAD.length).setValues([[
+    at(d.ts), txt(d.c), txt(d.t), txt(d.sid), txt(d.store), txt(d.nick), txt(d.tel), txt(d.time), first,
+    txt(d.device), txt(d.ref), '접수', '', '', '', ''
   ]]);
 }
 

@@ -250,8 +250,8 @@ html.ld .store,html.ld .nick,html.ld .cnt,html.ld [data-src]{color:transparent!i
 <input type="hidden" id="nick" value="라떼좋아">
 <div class="grp"><div class="lb">우편 받을 이름</div><input class="inp" id="name" placeholder="받으실 분 이름" autocomplete="name"></div>
 <div class="grp"><div class="lb">우편 받을 주소<small>집이 아니어도 직접 받으실 수 있는 곳이면 괜찮아요</small></div><div style="display:flex;gap:8px"><input class="inp" id="zip" placeholder="우편번호" readonly onclick="findAddr()"><button type="button" class="btn g" style="width:auto;height:auto;padding:0 16px;font-size:14px;flex:0 0 auto" onclick="findAddr()">주소 찾기</button></div><input class="inp" id="addr" style="margin-top:8px" placeholder="도로명 주소" readonly onclick="findAddr()"><input class="inp" id="addr2" style="margin-top:8px" placeholder="상세 주소 (동 · 호수)"></div>
-<label class="tiny agree"><input type="checkbox" id="agree"><span>편지를 보내 드리기 위해 이름과 주소를 받는 데 동의해요 <b>(필수)</b></span></label>
-<div class="legal">받은 이름과 주소는 페이타랩(패스오더)이 편지를 보내는 데만 쓰고, 보낸 뒤에는 바로 지워요.<br>동의하지 않으셔도 괜찮지만, 그러면 편지를 보내 드릴 수가 없어요.</div>
+<label class="tiny agree"><input type="checkbox" id="agree"><span><b>[필수]</b> 편지 우편 발송을 위한 개인정보 수집·이용에 동의합니다</span></label>
+<div class="legal">· 수집 항목: 우편 받을 이름, 배송지 주소<br>· 수집·이용 목적: 편지 우편 발송<br>· 보유 기간: 발송 완료 후 즉시 파기</div>
 <div class="note2" style="margin-top:14px">편지를 건네주시면 <b>참여 쿠폰</b>을 드려요.<br>사장님이 패스오더에 연락하시면 <b>10,000원 쿠폰</b>을 더 드려요.</div>
 </div>
 <div class="bar"><div class="note">편지를 받으시면 그날부터 2주 안에 <span class="store">패스카페</span>에 전해 주시겠어요?</div><div class="tiny" id="err" hidden style="color:#C4541A;margin:0 0 8px"></div><button class="btn" id="submit" onclick="submitForm()">편지 신청 완료하기 &gt;</button></div>

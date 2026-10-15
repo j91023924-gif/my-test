@@ -393,7 +393,10 @@ function record(){
   show(true);
 }
 function back(){try{localStorage.removeItem(KEY)}catch(e){}show(false);}
-try{const v=localStorage.getItem(KEY);if(v){document.getElementById('handDate').textContent=v;show(true);}}catch(e){}
+let recorded=false;
+try{const v=localStorage.getItem(KEY);if(v){recorded=true;document.getElementById('handDate').textContent=v;show(true);}}catch(e){}
+// 열람 기록: 페이지를 열 때마다 「열람」 탭에 한 줄 (회원ID · 매장은 서버가 열쇠로 채움)
+if(CONFIG.SUBMIT_URL)fetch(CONFIG.SUBMIT_URL,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify({type:'letter_view',ts:new Date().toISOString(),t:T,uid:Q.get('uid')||'',store:DATA.store,due:DATA.due,recorded,device:DEVICE,app:APP,ref:location.href})}).catch(()=>{});
 (function(){
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.35});
   document.querySelectorAll('.cpp').forEach(c=>io.observe(c));

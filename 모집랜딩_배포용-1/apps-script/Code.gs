@@ -8,7 +8,11 @@ function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sh = ss.getSheetByName('신청') || ss.insertSheet('신청');
   if (sh.getLastRow() === 0) sh.appendRow(['신청시각', '회원ID', '소구', '경로', '매장', '닉네임', '받는 분', '우편번호', '주소', '상세 주소', '유입 URL']);
-  sh.appendRow(COLS.map(function (k) { return k === 'ts' ? new Date(d.ts) : (d[k] || ''); }));
+  sh.appendRow(COLS.map(function (k) {
+    if (k === 'ts') return new Date(d.ts);
+    if (k === 'zip' && d.zip) return "'" + d.zip; // 우편번호 앞자리 0 유지
+    return d[k] || '';
+  }));
   return ContentService.createTextOutput('ok');
 }
 

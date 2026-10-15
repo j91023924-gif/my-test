@@ -10,10 +10,13 @@
 //   visit : 페이지를 열었을 때 → 「방문」에 한 줄 추가
 //   step  : 신청 화면으로 넘어갔을 때 → 「방문」의 도달 단계 갱신
 //   apply : 신청했을 때 (type 없는 예전 요청도 신청으로 처리) → 「신청」에 한 줄 추가 + 「방문」 갱신
+//   delivered : 「내 편지」에서 「편지 건넸어요」를 눌렀을 때 → 「전달」에 한 줄 추가 + 「모집대상」 전달 기록 Y
 
 var APPLY_HEAD = ['신청번호', '신청시각', '진입시각', '소요시간(초)', '회원ID', '열쇠', '매장ID', '소구', '경로', '매장', '표시 숫자', '첫 참여', '닉네임', '닉네임 변경', '받는 분', '우편번호', '주소', '상세 주소', '기기', '열린 앱', '유입 URL', '요일', '시간대', '중복 신청', '처리상태', '편지 발송일', '운송장번호', '사장님 문의 여부', '참여쿠폰 지급일', '성공쿠폰 지급일', '메모'];
 var VISIT_HEAD = ['방문ID', '진입시각', '회원ID', '열쇠', '매장ID', '소구', '경로', '매장', '기기', '열린 앱', '도달 단계', '신청화면 진입시각', '신청시각', '유입 URL'];
+var DELIV_HEAD = ['기록시각', '열쇠', '회원ID', '매장ID', '매장', '닉네임', '건넨 날', '누구에게', '신청번호', '기기', '열린 앱', '유입 URL', '참여쿠폰 지급일', '메모'];
 var STEP_COL = 11, FORM_AT_COL = 12, APPLY_AT_COL = 13; // 「방문」의 도달 단계 · 신청화면 진입시각 · 신청시각 열
+var DELIV_MARK_COL = 14; // 「모집대상」 N열 「전달 기록」
 var STEPS = ['랜딩', '신청화면', '신청완료'];
 
 function doGet(e) {
@@ -29,7 +32,8 @@ function doPost(e) {
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    if (d.type === 'visit') { addVisit(d); mark(p, 1); }
+    if (d.type === 'delivered') { addDelivered(d); markDelivered(p); }
+    else if (d.type === 'visit') { addVisit(d); mark(p, 1); }
     else if (d.type === 'step') { updateVisit(d, '신청화면', FORM_AT_COL); mark(p, 2); }
     else { addApply(d); updateVisit(d, '신청완료', APPLY_AT_COL); mark(p, 3); }
   } finally {
@@ -62,6 +66,25 @@ function mark(p, level) {
   var range = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('모집대상').getRange(p.row, 11, 1, 3);
   var cur = range.getValues()[0];
   range.setValues([flags[0].map(function (v, i) { return v || cur[i]; })]); // 이미 Y인 칸은 지우지 않음
+}
+
+function markDelivered(p) {
+  if (!p) return;
+  SpreadsheetApp.getActiveSpreadsheet().getSheetByName('모집대상').getRange(p.row, DELIV_MARK_COL).setValue('Y');
+}
+
+// 「내 편지」의 「편지 건넸어요」 기록. 14일 안 전달 판정은 기록시각 기준(건넨 날은 손님이 고른 참고값)
+function addDelivered(d) {
+  var sh = sheet('전달', DELIV_HEAD);
+  var applyNo = '';
+  if (d.t) {
+    var hits = sheet('신청', APPLY_HEAD).getRange('F:F').createTextFinder(String(d.t)).matchEntireCell(true).findAll();
+    if (hits.length) applyNo = sheet('신청', APPLY_HEAD).getRange(hits[hits.length - 1].getRow(), 1).getValue();
+  }
+  sh.getRange(sh.getLastRow() + 1, 1, 1, DELIV_HEAD.length).setValues([[
+    at(d.ts), txt(d.t), txt(d.uid), txt(d.sid), txt(d.store), txt(d.nick), txt(d.when), txt(d.whom),
+    txt(applyNo), txt(d.device), txt(d.app), txt(d.ref), '', ''
+  ]]);
 }
 
 // 손님이 입력한 값은 글자로 고정한다 (우편번호 앞자리 0 유지, '='로 시작하는 값이 수식으로 바뀌지 않게)

@@ -3,7 +3,7 @@
 //       (실행 계정: 나, 액세스 권한: 모든 사용자) → 웹 앱 URL을 config.js의 SUBMIT_URL에 넣기
 //
 // 개인화: 메시지 링크에는 ?t=열쇠 하나만 붙인다. 열쇠로 「모집대상」 시트를 찾아
-//   - GET  : 화면에 쓸 매장명 · 닉네임 · 요청 수 · 첫 참여만 돌려준다 (회원ID 등은 밖으로 내보내지 않음)
+//   - GET  : 화면에 쓸 매장명 · 닉네임 · 요청 수 · 첫 참여 · 경로만 돌려준다 (회원ID 등은 밖으로 내보내지 않음)
 //   - POST : 방문 · 신청을 기록할 때 회원ID · 매장ID · 소구 · 경로 · 매장명을 시트 값으로 채운다
 //
 // 페이지가 보내는 요청 (type)
@@ -18,7 +18,7 @@ var STEPS = ['랜딩', '신청화면', '신청완료'];
 
 function doGet(e) {
   var p = target((e.parameter || {}).t);
-  var out = p ? { ok: true, store: p.store, nick: p.nick, n: p.n, first: p.first } : { ok: false };
+  var out = p ? { ok: true, store: p.store, nick: p.nick, n: p.n, first: p.first, src: p.src } : { ok: false };
   return ContentService.createTextOutput(JSON.stringify(out)).setMimeType(ContentService.MimeType.JSON);
 }
 

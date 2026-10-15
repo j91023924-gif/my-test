@@ -29,9 +29,9 @@ function doPost(e) {
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    if (d.type === 'visit') addVisit(d);
-    else if (d.type === 'step') updateVisit(d, '신청화면', FORM_AT_COL);
-    else { addApply(d); updateVisit(d, '신청완료', APPLY_AT_COL); }
+    if (d.type === 'visit') { addVisit(d); mark(p, 1); }
+    else if (d.type === 'step') { updateVisit(d, '신청화면', FORM_AT_COL); mark(p, 2); }
+    else { addApply(d); updateVisit(d, '신청완료', APPLY_AT_COL); mark(p, 3); }
   } finally {
     lock.releaseLock();
   }
@@ -47,10 +47,21 @@ function target(t) {
   if (!found || found.getRow() === 1) return null;
   var r = sh.getRange(found.getRow(), 1, 1, 9).getValues()[0];
   return {
+    row: found.getRow(),
     uid: String(r[1]), sid: String(r[2]), store: String(r[3]), nick: String(r[4]),
     n: r[5] === '' ? null : Number(r[5]), first: String(r[6]).toUpperCase() !== 'N',
     g: String(r[7]), src: String(r[8])
   };
+}
+
+// 「모집대상」 K~M(방문 · 신청화면 도달 · 신청 완료)에 Y를 적는다. level 1=방문, 2=신청화면까지, 3=신청까지.
+// 1만 줄 넘는 명단에서 수식으로 세면 시트가 느려져서, 기록이 들어올 때 그 손님 줄에 직접 적는다
+function mark(p, level) {
+  if (!p) return;
+  var flags = [['Y', level >= 2 ? 'Y' : '', level >= 3 ? 'Y' : '']];
+  var range = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('모집대상').getRange(p.row, 11, 1, 3);
+  var cur = range.getValues()[0];
+  range.setValues([flags[0].map(function (v, i) { return v || cur[i]; })]); // 이미 Y인 칸은 지우지 않음
 }
 
 // 손님이 입력한 값은 글자로 고정한다 (우편번호 앞자리 0 유지, '='로 시작하는 값이 수식으로 바뀌지 않게)
